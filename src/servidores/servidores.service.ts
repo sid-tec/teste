@@ -1,31 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateServidoreDto } from './dto/create-servidore.dto';
-import { UpdateServidoreDto } from './dto/update-servidore.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 
 @Injectable()
 export class ServidoresService {
+
   constructor(private prisma: PrismaService) { }
 
 
-  create(createServidoreDto: CreateServidoreDto) {
-    return 'This action adds a new servidore';
+  create(createServidorDto: Prisma.ServidorCreateInput) {
+    return this.prisma.servidor.create({
+      data: createServidorDto
+    });
   }
 
   findAll() {
     return this.prisma.servidor.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} servidore`;
+  findOne(id: string) {
+    return this.prisma.servidor.findUnique({
+      where: {
+        key: id,
+      }
+    });
   }
 
-  update(id: number, updateServidoreDto: UpdateServidoreDto) {
-    return `This action updates a #${id} servidore`;
+  update(id: string, updateServidorDto: Prisma.ServidorUpdateInput) {
+    return this.prisma.servidor.update({
+      data: updateServidorDto,
+      where: {
+        key: id      // Se o seu id não chama id mudar aqui
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} servidore`;
+  remove(id: string) {
+    return this.prisma.servidor.delete({
+      where: {
+        key: id          // Se o seu id não chama id mudar aqui
+      }
+    });
   }
 }
